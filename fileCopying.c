@@ -26,13 +26,21 @@
 
 // }
 
-/* count characters in input; 1st version */
+/* count characters in input; 2nd version */
+
+
 
 int main()
 {
     double nc;
 
-    for (nc = 0; getchar() != EOF; ++nc) 
-            printf("%.0f\n",nc);
-    printf("%.0f yur\n", nc);
+    for (nc = 0; getchar() != EOF; nc= nc+1) 
+        // printf("%.0f\n", nc);
+        
+        ;
+    printf("%.0f\n", nc);
 }
+
+// What i've learned: https://stackoverflow.com/questions/61642054/how-to-count-doubles-in-c
+// Basically this function counts each character (including the enter) into the total count
+// So each character is it's own for loop.
