@@ -7,21 +7,28 @@
 int main()
 {
     int c, nl, nw, nc, state;
+    /* max 50 characters of space */
 
     state = OUT;
     nl = nw = nc = 0;
+    
 
     while ((c = getchar()) != EOF) {
-        nc++;
-        if (c == '\n')
-            nl++;
-        if (c == ' ' || c == '\n' || c == '\t')
-            state = OUT;
-        else if (state == OUT) {
-            state = IN;
-            nw++;
+        if (c == ' ' || c == '\n' || c == '\t') {
+            if (state == IN) {
+                state = OUT;
+                putchar('\n');
+                nl++;
+            }
+        } else{
+            if(state == OUT){
+                state = IN;
+                nw++;
+                
+            }
+            putchar(c);
+            nc++;
         }
-
     }
     printf("%d %d %d\n", nl, nw, nc);
 }
