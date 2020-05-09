@@ -13,16 +13,16 @@ int main()
 
     while ((c = getchar()) != EOF)
         if (c >= '0' && c <= '9')
-            ++ndigit[c-0];
+            ++ndigit[c-'0'];
         else if (c == ' ' || c == '\n' || c == '\t')
             nwhite++;
         else
             nother++;
     printf("digits =");
-    for (i = 0; i < 10; i++);
+    for (i = 0; i < 10; i++)
         printf(" %d", ndigit[i]);
     printf(", white space = %d, other = %d\n", nwhite, nother);
 
 }
 
-// I really do not understand what in the world this program is doing
+// https://stackoverflow.com/questions/61690887/c-programming-count-number-of-occurrences I understand now!
