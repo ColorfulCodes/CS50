@@ -52,6 +52,26 @@ node_t *insert_at_head(node_t **head, node_t *node_to_insert) {
     return node_to_insert;
 }
 
+// Insert a node after another node in the list
+node_t *insert_after_node(node_t *node_to_insert_after, node_t* newnode) {
+    //make the next of new node point to the next of node_to_insert_after
+    newnode->next = node_to_insert_after->next;
+    node_to_insert_after->next = newnode;
+
+}
+
+//function that finds a node
+node_t *find_node(node_t *head, int value) {
+    node_t *tmp = head;
+    while (tmp != NULL) {
+        if (tmp->value == value) {
+            return tmp;
+        }
+        tmp = tmp->next;
+    }
+    return NULL;
+}
+
 int main() {
     node_t *tmp;
     // declaring head pointer
@@ -60,21 +80,17 @@ int main() {
     for (int i = 0; i < 25; i++) {
         tmp = create_new_node(i);
         //de-reference head for value
-        head = insert_at_head(&head, tmp);
+        insert_at_head(&head, tmp);
     }
     
 
     //link them up
+    tmp = find_node(head, 13);
+    printf("Found node with value %d\n", tmp->value);
 
-    //make head point to the address of n3
-    //head = &n3;
-    // set each node's next pointer to the address of the other node
-    //n3.next = &n2;
-    //n2.next = &n1;
-    // this is how we know when to stop.
-    //n1.next = NULL;
-    //head = head->next;
-    //call the function to print
+    insert_after_node(tmp, create_new_node(75));
+
+
     printlist(head);
     return 0;
 }
