@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+//Instructions for preprocessor
+// There is a preference for using const
 #define STACK_LENGTH 5
 #define EMPTY (-1)
 // set stack_empty to lowest possible interger
@@ -13,10 +15,15 @@ typedef struct node {
     struct node * next;
 }node;
 
+// typedef node* stack;
+
 node* head = NULL;
 
 bool push(int value) {
+    //memory survives the state of the function
     node *newnode = malloc(sizeof(node));
+    // if malloc fails and gets to big return false as we're running out of memory
+    
     if (newnode == NULL) return false;
     
     newnode->value = value;
@@ -31,8 +38,10 @@ int pop() {
     int result = head->value;
     //save head
     node *tmp = head;
-    // new head is next
+
+    // new head is next because it was popped off
     head = head->next;
+
     // free the node
     free(tmp);
     return result;

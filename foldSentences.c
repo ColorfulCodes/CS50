@@ -15,9 +15,10 @@
 // count number of chars, once it reaches certain amount
 int main (void) 
 {
-    //cbreak();
+    
     // to open curses terminal
     initscr();
+    cbreak();
 
     int i, c;
 

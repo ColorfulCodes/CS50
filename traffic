@@ -1,0 +1,166 @@
+#include <stdbool.h>
+#include <errno.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
+
+#include <applibs/log.h>
+#include <applibs/gpio.h>
+// Good for type checking
+#define LED_color enum light {GREEN = 1, YELLOW, RED} 
+const int GREEN_LED = 1;
+const int RED_LED = 2;
+const int YELLOW_LED = 3;
+int active_led = GREEN_LED;
+//LED_color active_led = GREEN;
+
+//Declare function
+int traffic_light(int, int, int, int, int);
+
+//change all leds to fd
+
+// This function should blink Yellow until button A is pressed to switch to typical working traffic light
+void caution_light(int y1, int y2, int B, int green_led, int red_led) {
+
+    // This should blink on and off for one second
+    const struct timespec sleepTime = { 1, 0 };
+    while (true) {
+        // check to see if button A was pressed
+        GPIO_Value_Type value;
+        GPIO_GetValue(B, &value);
+        Log_Debug(
+            "Button value (%d)\n", value);
+
+       
+        //when button A is pressed activate working light
+        if (value == 0) {
+            traffic_light(y1, y2, B, green_led, red_led);
+        }
+        GPIO_SetValue(y1, GPIO_Value_Low);
+        GPIO_SetValue(y2, GPIO_Value_Low);
+        nanosleep(&sleepTime, NULL);
+        GPIO_SetValue(y1, GPIO_Value_High);
+        GPIO_SetValue(y2, GPIO_Value_High);
+        nanosleep(&sleepTime, NULL);
+    }
+
+    
+}
+
+//Build Errors: type of defalts to int (need to specify file descriptor)
+//function declaration isn't a prototype
+// statements have no effect are just comments
+//function declaration isn't a prototype
+//conflicting types for traffic light
+
+// Pass in file descriptors
+int traffic_light(int y1, int y2, int B, int green_led, int red_led) {
+    // check to see if button A was pressed
+    // if so, switch to caution and repeat
+
+    //Define green, yellow and red lights 
+    // Blink on different leds
+    while (true) {
+
+        int color1 = green_led;
+        int color2 = green_led;
+        int off = red_led;
+
+        // We need a state machine to check when button is pressed and specific time elapsed.
+
+        // for loop to count one second
+        for (int i = 0; i < 1000; i++) {
+            //active led
+            GPIO_SetValue(off, GPIO_Value_High);
+            GPIO_SetValue(color1, GPIO_Value_Low);
+            GPIO_SetValue(color2, GPIO_Value_Low);
+
+        }
+            if (active_led == GREEN_LED) {
+                // switch to red
+                Log_Debug("Reached the Red");
+                color1 = red_led;
+                color2 = red_led;
+                off = green_led;
+                active_led == RED_LED;
+
+            }
+            else if (active_led == RED_LED) {
+                //switch to yellow
+                color1 = y1;
+                color2 = y2;
+                off = red_led;
+                active_led == YELLOW_LED;
+            }
+
+            else if (active_led == YELLOW_LED) {
+                // switch to green
+                color1 = green_led;
+                color2 = green_led;
+                off = red_led;
+                active_led == GREEN_LED;
+            }
+
+            // check to see if button A was pressed
+            GPIO_Value_Type value;
+            GPIO_GetValue(B, &value);
+            Log_Debug(
+                "Button value (%d)\n", value);
+
+            //when button A is pressed activate working light
+            if (value == 0) {
+                caution_light(y1, y2, B, green_led, red_led);
+            }
+    }
+    
+}
+
+int main(void)
+{
+    int green_led = GPIO_OpenAsOutput(9, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (green_led < 0) {
+        Log_Debug(
+            "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
+            strerror(errno), errno);
+        return -1;
+    }
+
+    int red_led = GPIO_OpenAsOutput(15, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (red_led < 0) {
+        Log_Debug(
+            "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
+            strerror(errno), errno);
+        return -1;
+    }
+
+    int yellow_led = GPIO_OpenAsOutput(18, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (yellow_led < 0) {
+        Log_Debug(
+            "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
+            strerror(errno), errno);
+        return -1;
+    }
+
+    int yellow_led2 = GPIO_OpenAsOutput(19, GPIO_OutputMode_PushPull, GPIO_Value_High);
+    if (yellow_led2 < 0) {
+        Log_Debug(
+            "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
+            strerror(errno), errno);
+        return -1;
+    }
+
+    int button_A = GPIO_OpenAsInput(12);
+    if (button_A < 0) {
+        Log_Debug(
+            "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
+            strerror(errno), errno);
+        return -1;
+    }
+    //activate caution blink first
+    // pass in light variables
+    caution_light(yellow_led, yellow_led2, button_A, green_led, red_led);
+    
+    return 0;
+
+    
+}

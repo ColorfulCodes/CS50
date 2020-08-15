@@ -11,21 +11,27 @@ int mystack[STACK_LENGTH];
 int top = EMPTY;
 
 bool push(int value) {
+    // if greater than actual length
     if (top >= STACK_LENGTH-1) return false;
+    //increment moving along
     top ++;
+    //fill stack with values
     mystack[top] = value;
     return true;
 }
 
 int pop() {
+    //return lowest possible integer if empty
     if (top == EMPTY) return STACK_EMPTY;
-
+    // top with be the index of whatever was added
+    //to the end of the array
     int result = mystack[top];
+    // decrement to move closer to front
     top --;
     return result;
 }
 
-
+// Last in first out
 int main() {
 
     push(59);
