@@ -1,0 +1,14 @@
+Getting started with MT3620, my first sample application
+
+Part 1:
+Show button download and AS visual studio new blink
+switch light color etc
+
+Part 2: Show click of button to another color and hold,
+if button pressed, turn green
+
+Part 3: Meat, mutable storage
+
+Part 4: Make clicks be captured every 10 ms
+
+Write sample app tutorial first then video
